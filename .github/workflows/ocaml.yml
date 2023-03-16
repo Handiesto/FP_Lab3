@@ -1,0 +1,35 @@
+name: OCaml CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+
+  run:
+    name: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+      - uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: 4.14.x
+      - name: Install
+        run: |
+          opam install dune
+          opam install -t . --deps-only
+          opam install ocamlformat
+          opam install logs
+          opam install ounit2.2.2.6
+      - name: Lint
+        run: opam exec -- dune fmt
+      - name: Build
+        run: opam exec -- dune build
+      - name: Test
+        run: opam exec -- dune runtest

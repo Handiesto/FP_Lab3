@@ -1,0 +1,7 @@
+*.txt
+*.opam
+
+_build/**
+.idea/**
+# Project exclude paths
+/out/
