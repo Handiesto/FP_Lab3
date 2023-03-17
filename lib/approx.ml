@@ -16,27 +16,38 @@ let linear points =
   let b = (sxx *. sy -. sx *. sxy) /. (sxx *. n -. sx *. sx) in
   fun x -> a *. x +. b
 
-let segment points x =
-  let rec findBorder i v f =
-    if i < 0 || i >= List.length points then -1
-    else
-      let x', _ = List.nth points i in
-      if f x' v then i else findBorder (i + (if f x' v then -1 else 1)) v f
+let segment points =
+  let rec findBottomBorder i v =
+    if i < List.length points then
+      let x, _ = List.nth points i in
+      if x < v then i else findBottomBorder (i + 1) v
+    else -1
   in
+
+  let rec findTopBorder i v =
+    if i >= 0 then
+      let x, _ = List.nth points i in
+      if x >= v then i else findTopBorder (i - 1) v
+    else -1
+  in
+
   let f x =
-    let top = findBorder (List.length points - 1) x (<=) in
-    let bottom = findBorder 0 x (<) in
-    match top, bottom with
-    | -1, _ -> List.nth points 0 |> snd
-    | _, -1 -> List.nth points (List.length points - 1) |> snd
-    | _ ->
-        let xi, yi = List.nth points top in
-        let xiPrev, yiPrev = List.nth points bottom in
-        let a = (yi -. yiPrev) /. (xi -. xiPrev) in
-        let b = yi -. (a *. xi) in
-        (a *. x) +. b
+    let top = findTopBorder (List.length points - 1) x in
+    let bottom = findBottomBorder 0 x in
+    if top = -1 then
+      let _, yi = List.nth points 0 in
+      yi
+    else if bottom = -1 then
+      let _, yi = List.nth points (List.length points - 1) in
+      yi
+    else
+      let xi, yi = List.nth points top in
+      let xiPrev, yiPrev = List.nth points bottom in
+      let a = (yi -. yiPrev) /. (xi -. xiPrev) in
+      let b = yi -. (a *. xi) in
+      (a *. x) +. b
   in
-  f x
+  f
 
 
 let logarifm points =

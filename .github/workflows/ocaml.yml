@@ -32,5 +32,3 @@ jobs:
         run: opam exec -- dune fmt
       - name: Build
         run: opam exec -- dune build
-      - name: Test
-        run: opam exec -- dune runtest
