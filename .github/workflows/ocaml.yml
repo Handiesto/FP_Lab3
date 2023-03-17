@@ -27,8 +27,10 @@ jobs:
           opam install ocamlformat
           opam install logs
           opam install lwt
-
+          opam install ounit2.2.2.6
       - name: Lint
         run: opam exec -- dune fmt
       - name: Build
         run: opam exec -- dune build
+      - name: Test
+        run: opam exec -- dune runtest
