@@ -8,15 +8,14 @@ let rec truncate k l =
 let read k pList =
   match read_line () with
   | "" -> pList
-  | input ->
-    let data = String.split_on_char ';' input |> List.filter ((<>) "") in
-    match data with
-    | x_str :: y_str :: _ ->
-      let x = float_of_string x_str in
-      let y = float_of_string y_str in
-      (x, y) :: truncate (k - 1) pList
-    | _ -> pList
-
+  | input -> (
+      let data = String.split_on_char ';' input |> List.filter (( <> ) "") in
+      match data with
+      | x_str :: y_str :: _ ->
+          let x = float_of_string x_str in
+          let y = float_of_string y_str in
+          (x, y) :: truncate (k - 1) pList
+      | _ -> pList )
 
 let rec approximationImpl n k ids points =
   let added = read k points in
@@ -39,9 +38,8 @@ let rec approximationImpl n k ids points =
 let approximate n k ids = approximationImpl n k ids []
 
 let parse_ids = function
-  | (_ :: _ :: _ :: rest) -> List.map int_of_string rest
+  | _ :: _ :: _ :: rest -> List.map int_of_string rest
   | _ -> []
-
 
 let () =
   match Array.length Sys.argv with
