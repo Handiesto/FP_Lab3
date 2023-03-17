@@ -5,4 +5,4 @@ _build/**
 .idea/**
 # Project exclude paths
 /out/
-/test/**
+
